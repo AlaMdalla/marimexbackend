@@ -20,13 +20,11 @@ const corsOptions = {
   credentials: true,
 };
 
-// Use cors middleware with options
 app.use(cors(corsOptions));
 
 app.use("/api/marble", marbleRouter);
 app.use("/api/users", userRouter);
 
-// Serve favicon.ico
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/favicon.ico', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'favicon.ico'));
