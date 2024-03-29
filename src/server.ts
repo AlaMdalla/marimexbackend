@@ -16,11 +16,11 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin: 'https://marimex.netlify.app',
+  //origin: 'https://marimex.netlify.app',
  // credentials: true,
 };
 
-app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
 
 app.use("/api/marble", marbleRouter);
 app.use("/api/users", userRouter);
