@@ -1,14 +1,12 @@
 import express from "express";
-const http = require('http');
+import http from 'http';
 import cors from "cors";
 import path from 'path';
-require('dotenv').config();
-
-import { sample_marble, sample_tags, sample_users } from "./data";
-import jwt from "jsonwebtoken";
+import { dbConnect } from "./configs/database.config";
 import marbleRouter from './routers/marble.router';
 import userRouter from './routers/user.router';
-import { dbConnect } from "./configs/database.config";
+
+require('dotenv').config();
 
 console.log('MONGO_URI:', process.env.MONGO_URI);
 
@@ -18,10 +16,11 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin: 'https://marimex.netlify.app',
+  origin: ['https://marimex.netlify.app', 'http://localhost:4200'],
   credentials: true,
 };
 
+// Use cors middleware with options
 app.use(cors(corsOptions));
 
 app.use("/api/marble", marbleRouter);
