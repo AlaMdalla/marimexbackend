@@ -32,7 +32,9 @@ router.post('/upload', upload.single('image'), function (req, res) {
     });
   }
 
-  cloudinary.uploader.upload(req.file.path, function (err, result) {
+  cloudinary.uploader.upload(req.file.path, {
+  upload_preset: 'my_preset' // make sure this is your unsigned preset
+},function (err, result) {
     if (err) {
       // Show full error details
       console.error('Cloudinary Upload Error:', err);
