@@ -34,10 +34,21 @@ router.post('/upload', upload.single('image'), function (req, res) {
 
   cloudinary.uploader.upload(req.file.path, function (err, result) {
     if (err) {
-      console.log(err);
+      // Show full error details
+      console.error('Cloudinary Upload Error:', err);
+
+      // Optional: log specific parts
+      if (err.http_code) {
+        console.error('HTTP Code:', err.http_code);
+      }
+      if (err.message) {
+        console.error('Message:', err.message);
+      }
+
       return res.status(500).json({
         success: false,
-        message: 'Error',
+        message: err.message || 'Cloudinary Upload Failed',
+        error: err,
       });
     }
 
