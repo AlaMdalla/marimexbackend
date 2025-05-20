@@ -4,8 +4,11 @@ import asynceHandler from  'express-async-handler';
 import { MarbleModel } from "../models/marble.model";
 import { HTTP_BAD_REQUEST } from "../constants/http_status";
 import {  HTTP_NOT_FOUND } from "../constants/http_status";
-
+import upload from '../configs/multer';
+import cloudinary from '../configs/cloudinary';
 const router=Router();
+
+
 
 
 router.get("/seed",asynceHandler(
@@ -21,6 +24,31 @@ res.send("Seed Is Done !");
   
   
 ))
+router.post('/upload', upload.single('image'), function (req, res) {
+  if (!req.file) {
+    return res.status(400).json({
+      success: false,
+      message: 'No file uploaded',
+    });
+  }
+
+  cloudinary.uploader.upload(req.file.path, function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({
+        success: false,
+        message: 'Error',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Uploaded!',
+      data: result,
+    });
+  });
+});
+
 router.get("/",asynceHandler(
   async(req, res)=>{
     const marbels=await MarbleModel.find();
@@ -39,6 +67,12 @@ router.get("/search/:searchTerm", async (req, res) => {
   }
 });
 
+router.post('/upload', (req, res) => {
+
+  res.json({ message: 'File uploaded successfully!',});
+});
+
+module.exports = router;
 
 router.get("/tags",asynceHandler(
  

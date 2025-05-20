@@ -1,42 +1,25 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
+import { IMarble } from '../types/marble.types';
 
-export interface Marble {
-  name: string;
-  price: number;
-  tags?: string[]; // Optional tags field
-  favorite: boolean;
-  stars: number;
-  imageurl: string;
-  descriptions: string[];
-}
-
-const MarbleSchema = new Schema<Marble>(
+const marbleSchema = new Schema<IMarble>(
   {
     name: { type: String, required: true },
     price: { type: Number, required: true },
-    tags: { type: [String] },
+    tags: { type: [String], required: true },
     favorite: { type: Boolean, default: false },
     stars: { type: Number, required: true },
     imageurl: { type: String, required: true },
-    descriptions: { type: [String], required: true },
+    descriptions: { type: String, required: true }
   },
   {
+    timestamps: true,
     toJSON: {
-      virtuals: true,
+      virtuals: true
     },
     toObject: {
-      virtuals: true,
-    },
-    timestamps: true,
+      virtuals: true
+    }
   }
 );
 
-MarbleSchema.virtual("id").get(function (this: any) {
-  return this._id.toString();
-});
-
-MarbleSchema.virtual("id").set(function (this: any, id: string) {
-  this._id = id;
-});
-
-export const MarbleModel = model<Marble>("Marble", MarbleSchema);
+export const MarbleModel = mongoose.model<IMarble>('marble', marbleSchema);
