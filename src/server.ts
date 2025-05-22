@@ -5,6 +5,7 @@ import path from 'path';
 import { dbConnect } from "./configs/database.config";
 import marbleRouter from './routers/marble.router';
 import userRouter from './routers/user.router';
+import commandeRouter from "./routers/commande.router";
 
 require('dotenv').config();
 
@@ -16,13 +17,15 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin: 'https://marimex.netlify.app',
+  origin:[ 'https://marimex.netlify.app','http://localhost:4200'],
  credentials: true,
 };
 
 app.use(cors(corsOptions));
 
 app.use("/api/marble", marbleRouter);
+app.use("/api/commande", commandeRouter);
+
 app.use("/api/users", userRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
