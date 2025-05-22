@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin:[ 'https://marimex.netlify.app','http://localhost:4200'],
+  origin:[ 'https://marimex.netlify.app','https://marimex-frontt-6ti8.vercel.app/'],
  credentials: true,
 };
 
