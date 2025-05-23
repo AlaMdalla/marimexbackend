@@ -1,17 +1,18 @@
 import { Router } from "express";
 import asyncHandler from 'express-async-handler';
 import { CommandeModel } from "../models/commande.model";
+import { HTTP_NOT_FOUND } from "../constants/http_status";
 
 const router = Router();
 
 router.post("/", asyncHandler(
   async (req, res, next) => {
     try {
-      const { list_marbles, totalPrice, location ,number_of_phone,order_name} = req.body;
+      const { list_Commandes, totalPrice, location ,number_of_phone,order_name} = req.body;
 
       // Basic checks
-      if (!list_marbles || !Array.isArray(list_marbles) || list_marbles.length === 0) {
-        res.status(400).json({ success: false, message: 'list_marbles is required and must be a non-empty array' });
+      if (!list_Commandes || !Array.isArray(list_Commandes) || list_Commandes.length === 0) {
+        res.status(400).json({ success: false, message: 'list_Commandes is required and must be a non-empty array' });
         return;
       }
       if (typeof totalPrice !== 'number') {
@@ -25,7 +26,7 @@ router.post("/", asyncHandler(
 
       // Create the order
       const newCommande = await CommandeModel.create({
-        list_marbles,
+        list_Commandes,
         totalPrice,
         location,
         number_of_phone,
@@ -63,6 +64,22 @@ router.get("/getAll", asyncHandler(
         success: false,
         message: 'Failed to fetch commandes'
       });
+    }
+  }
+));
+router.delete("/:commandeId", asyncHandler(
+  async (req, res) => {
+    const commandeId = req.params.commandeId;
+
+    try {
+      const deletedCommande = await CommandeModel.findByIdAndDelete(commandeId);
+      if (!deletedCommande) {
+        res.status(HTTP_NOT_FOUND).send('commande not found');
+        return;
+      }
+      res.send(deletedCommande);
+    } catch (error) {
+      res.status(500).send({ error: 'An error occurred while processing the request.' });
     }
   }
 ));
