@@ -16,16 +16,30 @@ dbConnect();
 const app = express();
 app.use(express.json());
 
+// Allow multiple CORS origins
+const allowedOrigins = [
+  'https://marimexste.com',
+  'https://www.example.com', // Add any other origins here
+  'http://localhost:4200'
+];
+
 const corsOptions = {
-  origin:'https://marimexste.com',
- credentials: true,
+  origin: function (origin: any, callback: any) {
+    // Allow requests with no origin (e.g., mobile apps, curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
 
 app.use("/api/marble", marbleRouter);
 app.use("/api/commande", commandeRouter);
-
 app.use("/api/users", userRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,7 +48,6 @@ app.get('/favicon.ico', (req, res) => {
 });
 
 const server = http.createServer(app);
-
 const port = process.env.PORT || 5000;
 
 server.listen(port, () => {
