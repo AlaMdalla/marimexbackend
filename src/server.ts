@@ -19,7 +19,7 @@ app.use(express.json());
 // Allow multiple CORS origins
 const allowedOrigins = [
   'https://marimexste.com',
-  'https://www.example.com', // Add any other origins here
+  'https://marimex-frontt-6ti8.vercel.app', 
   'http://localhost:4200'
 ];
 
