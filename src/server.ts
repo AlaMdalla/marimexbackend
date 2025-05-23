@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-  origin:'https://marimex.netlify.app',
+  origin:'https://marimexste.com',
  credentials: true,
 };
 
