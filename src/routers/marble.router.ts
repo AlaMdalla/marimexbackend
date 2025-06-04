@@ -24,48 +24,35 @@ res.send("Seed Is Done !");
   
   
 ))
-router.post('/upload', upload.single('image'), function (req, res) {
-  if (!req.file) {
-    return res.status(400).json({
-      success: false,
-      message: 'No file uploaded',
-    });
-  }
-
-  cloudinary.uploader.upload(req.file.path, {
-  upload_preset: 'ml_default' // make sure this is your unsigned preset
-},function (err, result) {
-    if (err) {
-      // Show full error details
-      console.error('Cloudinary Upload Error:', err);
-
-      // Optional: log specific parts
-      if (err.http_code) {
-        console.error('HTTP Code:', err.http_code);
-      }
-      if (err.message) {
-                console.log("entred")
-
-        console.error('Message:', err.message);
-      }
-
-      return res.status(500).json(
-        {
+router.post('/upload', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
         success: false,
-        message: err.message || 'Cloudinary Upload Failed',
-        error: err,
+        message: 'No file uploaded',
       });
-
     }
 
-    res.status(200).json({
+    // Unsigned upload - use unsigned preset only, no timestamp or signature
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      upload_preset: 'ml_default', // ⚠️ Must be an unsigned preset
+    });
+
+    return res.status(200).json({
       success: true,
       message: 'Uploaded!',
       data: result,
     });
-  });
-});
+  } catch (err: any) {
+    console.error('Cloudinary Upload Error:', err);
 
+    return res.status(err.http_code || 500).json({
+      success: false,
+      message: err.message || 'Cloudinary Upload Failed',
+      error: err,
+    });
+  }
+});
 router.get("/",asynceHandler(
   async(req, res)=>{
     const marbels=await MarbleModel.find();
@@ -84,10 +71,6 @@ router.get("/search/:searchTerm", async (req, res) => {
   }
 });
 
-router.post('/upload', (req, res) => {
-
-  res.json({ message: 'File uploaded successfully!',});
-});
 
 module.exports = router;
 
