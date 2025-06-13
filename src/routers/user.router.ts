@@ -79,8 +79,7 @@ const Token = jwt.sign(
 const CLIENT_ID = process.env.CLIENT_ID ;
 const client = new OAuth2Client(CLIENT_ID);
 router.use(bodyParser.json());
-
-router.post('/api/auth/google', async (req, res) => {
+router.post('/google', async (req, res) => {
   const { token } = req.body;
   try {
     const ticket = await client.verifyIdToken({
@@ -99,15 +98,17 @@ router.post('/api/auth/google', async (req, res) => {
     let user = await UserModel.findOne({ email });
 
     if (!user) {
-console.log("entred");      user = await UserModel.create({
+      console.log("entered");
+      user = await UserModel.create({
         name,
         email: email.toLowerCase(),
-        password: '', // optional: set to '' or some Google placeholder
+        password: 'google_oauth',
+        isGoogleLogin: true,
         isAdmin: false,
       });
     }
 
-    // Return same token format as login/register
+    // Return token response
     const response = genarateTokenResponse(user);
     res.status(200).json(response);
   } catch (err) {
