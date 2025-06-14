@@ -161,6 +161,25 @@ router.delete("/:marbleID", asynceHandler(
     }
   }
 ));
+router.put("/updateAll", async (req, res) => {
+    try {
+      const updateFields = req.body;
+
+      if (!updateFields || typeof updateFields !== 'object') {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid update data'
+        });
+      }
+
+      const result = await MarbleModel.updateMany({}, { $set: updateFields });
+
+  } catch (error) {
+    res.status(500).send({ error: 'An error occurred while processing the request.' });
+  }
+})
+
+
 router.delete("/:marbleID", asynceHandler(
   async (req, res) => {
     const marbleId = req.params.marbleID;
