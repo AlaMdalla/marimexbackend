@@ -8,11 +8,11 @@ const router = Router();
 router.post("/", asyncHandler(
   async (req, res, next) => {
     try {
-      const { list_Commandes, totalPrice, location ,number_of_phone,order_name} = req.body;
+      const { list_marbles, totalPrice, location ,number_of_phone,order_name} = req.body;
 
       // Basic checks
-      if (!list_Commandes || !Array.isArray(list_Commandes) || list_Commandes.length === 0) {
-        res.status(400).json({ success: false, message: 'list_Commandes is required and must be a non-empty array' });
+      if (!list_marbles || !Array.isArray(list_marbles) || list_marbles.length === 0) {
+        res.status(400).json({ success: false, message: 'list_marbles is required and must be a non-empty array' });
         return;
       }
       if (typeof totalPrice !== 'number') {
@@ -26,7 +26,7 @@ router.post("/", asyncHandler(
 
       // Create the order
       const newCommande = await CommandeModel.create({
-        list_Commandes,
+        list_marbles,
         totalPrice,
         location,
         number_of_phone,
