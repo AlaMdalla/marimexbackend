@@ -145,6 +145,40 @@ router.post("/create", asynceHandler(
     res.status(201).json(dbMarble);
   }
 ));
+
+router.post("/createMultiple", asynceHandler(
+  async (req, res) => {
+    const marbles = req.body;
+
+    if (!Array.isArray(marbles)) {
+      res.status(HTTP_BAD_REQUEST)
+        .send('Request body must be an array of marbles');
+      return;
+    }
+
+    // Validate each marble object
+    for (const marble of marbles) {
+      if (!marble.name || !marble.price) {
+        res.status(HTTP_BAD_REQUEST)
+          .send('Each marble must have at least a name and price');
+        return;
+      }
+
+      // Check if marble with same name already exists
+      const existingMarble = await MarbleModel.findOne({ name: marble.name });
+      if (existingMarble) {
+        res.status(HTTP_BAD_REQUEST)
+          .send(`Marble with name "${marble.name}" already exists`);
+        return;
+      }
+    }
+
+    // Create all marbles
+    const createdMarbles = await MarbleModel.insertMany(marbles);
+    res.status(201).json(createdMarbles);
+  }
+));
+
 router.delete("/:marbleID", asynceHandler(
   async (req, res) => {
     const marbleId = req.params.marbleID;
