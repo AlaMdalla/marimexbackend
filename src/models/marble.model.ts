@@ -22,4 +22,11 @@ const marbleSchema = new Schema<IMarble>(
   }
 );
 
+// Add virtual field for comments
+marbleSchema.virtual('comments', {
+  ref: 'comment',
+  localField: '_id',
+  foreignField: 'marbleId'
+});
+
 export const MarbleModel = mongoose.model<IMarble>('marble', marbleSchema);

@@ -6,6 +6,7 @@ import { dbConnect } from "./configs/database.config";
 import marbleRouter from './routers/marble.router';
 import userRouter from './routers/user.router';
 import commandeRouter from "./routers/commande.router";
+import commentRouter from "./routers/comment.router";
 
 require('dotenv').config();
 
@@ -41,6 +42,7 @@ app.use(cors(corsOptions));
 app.use("/api/marble", marbleRouter);
 app.use("/api/commande", commandeRouter);
 app.use("/api/users", userRouter);
+app.use("/api/comments", commentRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/favicon.ico', (req, res) => {
