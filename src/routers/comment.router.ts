@@ -18,7 +18,7 @@ router.get('/marble/:marbleId', asynceHandler(
 // Add a new comment
 router.post('/add', asynceHandler(
   async (req, res) => {
-    const { marbleId, userId, userName, userPicture, text, rating } = req.body;
+    const { marbleId, userId, userName, text, rating } = req.body;
 
     // Validate marble exists
     const marble = await MarbleModel.findById(marbleId);
@@ -32,7 +32,7 @@ router.post('/add', asynceHandler(
       marbleId,
       userId,
       userName,
-      userPicture,
+      
       text,
       rating
     };
