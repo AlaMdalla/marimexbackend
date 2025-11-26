@@ -7,9 +7,8 @@ export interface ICommande {
   list_marbles: IMarble[];
   number_of_phone: string;
   order_name: string;
-  adresse?: string;
   totalPrice: number;
-  location: { lat: number; lng: number };
+  location?: { lat: number; lng: number };
 }
 
 export const CommandeSchema = new Schema<ICommande>(
@@ -32,13 +31,9 @@ export const CommandeSchema = new Schema<ICommande>(
       type: String,
       required: true,
     },
-    adresse: {
-      type: String,
-      required: false,
-    },
     location: {
-      lat: { type: Number, required: true },
-      lng: { type: Number, required: true },
+      lat: { type: Number, required: false },
+      lng: { type: Number, required: false },
     },
   },
   {
