@@ -8,7 +8,7 @@ const router = Router();
 router.post("/", asyncHandler(
   async (req, res, next) => {
     try {
-      const { list_marbles, totalPrice, location ,number_of_phone,order_name} = req.body;
+      const { list_marbles, totalPrice, location, number_of_phone, order_name, adresse } = req.body;
 
       // Basic checks
       if (!list_marbles || !Array.isArray(list_marbles) || list_marbles.length === 0) {
@@ -30,7 +30,8 @@ router.post("/", asyncHandler(
         totalPrice,
         location,
         number_of_phone,
-        order_name
+        order_name,
+        adresse
       });
 
       // Send success response
