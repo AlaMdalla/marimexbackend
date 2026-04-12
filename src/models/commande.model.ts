@@ -9,6 +9,7 @@ export interface ICommande {
   order_name: string;
   totalPrice: number;
   location?: { lat: number; lng: number };
+  address?: string;
 }
 
 export const CommandeSchema = new Schema<ICommande>(
@@ -28,6 +29,10 @@ export const CommandeSchema = new Schema<ICommande>(
       required: true,
     },
     order_name: {
+      type: String,
+      required: true,
+    },
+    address: {
       type: String,
       required: true,
     },
